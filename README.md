@@ -27,7 +27,7 @@ Now assign them a % under the correct week, in the row for that project.
 You've assigned them!
 
 ## Update Overviews
-under capacity planning, click 'update projects'
+under capacity planning in the top menu , click 'update projects'
 
 ## Adding a project
 go to the project overview sheet, you should see your new project name with a red background, this means the project sheet doesnt exist. Copy the name of the project from that cell and select
