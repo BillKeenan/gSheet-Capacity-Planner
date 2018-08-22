@@ -5,4 +5,41 @@ Simply make a new sheet, click tools->script editor.
 
 paste this script in there, and save, 
 
-From the menu choose 'Run -> run function -> onLoad'
+From the menu choose *Run -> run function -> onLoad*
+
+You'll have to grant permissions at this step.
+
+go back to the sheet you should see
+* Project Overview
+* People Overview
+
+They are of course empty.
+
+## add a person
+click 'capacity functions - > add person' from the top menu
+give them a name
+
+## Assign a person work
+In the correct week, add a project name for the person in column B, underneat their 'base' assignments (repeating work which must always happen)
+
+Now assign them a % under the correct week, in the row for that project.
+
+You've assigned them!
+
+## Update Overviews
+under capacity planning, click 'update projects'
+
+## Adding a project
+go to the project overview sheet, you should see your new project name with a red background, this means the project sheet doesnt exist. Copy the name of the project from that cell and select
+Capacity Functions -> add project
+paste the name (these must match exactly)
+The project sheet will now be created.
+
+## set a projects scope
+on the newly created project sheet, enter a number of days/story points effort in cell B2
+
+Go back and look at your project overview, it should now be populated with the work allotments
+
+Look at your person overview, you should see their allotments.
+
+If they go over 80% the cell will turn red to show they are over-assigned
