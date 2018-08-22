@@ -43,3 +43,10 @@ Go back and look at your project overview, it should now be populated with the w
 Look at your person overview, you should see their allotments.
 
 If they go over 80% the cell will turn red to show they are over-assigned
+
+# Track a projects progress
+at the end of the week, or the start of the next one, review the points closed off in the past week, and enter them in the 'actual' row of the project sheet.
+
+The plan/actual plan will adjust, and colours will be added to indicate drift (NOT ADDED YET)
+
+If you find the scope has increased, you can enter that in the 'Added Points' row, for the appropriate week.
