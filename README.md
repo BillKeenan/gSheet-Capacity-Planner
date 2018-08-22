@@ -5,7 +5,7 @@ Simply make a new sheet, click tools->script editor.
 
 paste this script in there, and save, 
 
-From the menu choose *Run -> run function -> onLoad*
+From the menu choose *Run -> run function -> onOpen*
 
 You'll have to grant permissions at this step.
 
