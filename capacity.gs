@@ -229,10 +229,12 @@ function addPerson(){
     sheet.getRange('C4:BB4').setValue("=SUM(C7:INDEX(C7:C65536,MATCH(TRUE,INDEX(ISBLANK(C7:C65536),0,0),0)-1,0))");
     sheet.getRange('C4:BB4').setNumberFormat("0%");
     sheet.getRange('C7:BB100').setNumberFormat("0%");
-    sheet.getRange('C5').setValue(this.firstMonday(0,2018));
+    sheet.getRange('C5').setValue(this.firstMonday(this.firstMonth,2018));
     sheet.getRange('D5:BB5').setValue("=C5+7");
     sheet.getRange('C6:BB6').setValue(5);
                                       
+    updatePeople();
+    
   } else if (button == ui.Button.CANCEL) {
     // User clicked "Cancel".
     ui.alert('I didn\'t get your name.');
