@@ -16,12 +16,14 @@ function onOpen() {
   
   
   SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-      .createMenu('Capacity Functions')
-      .addItem('Update Projects', 'updateProjects')
-      .addItem('Update People on this Project', 'updateProjectAssignments')
-      .addItem('Update People', 'updatePeople')
-      .addItem('Add Person', 'addPerson')
-      .addItem('Add Project', 'addProject')
+  .createMenu('Capacity Functions')
+  .addItem('Update Projects', 'updateProjects')
+  .addItem('Update People on this Project', 'updateProjectAssignments')
+  .addItem('Update People', 'updatePeople')
+  .addItem('Add Person', 'addPerson')
+  .addItem('Add Project', 'addProject')
+  .addItem('Hide Projects', 'hideProjects')
+  .addItem('Hide People', 'hidePeople')
       .addToUi();
 }
 
