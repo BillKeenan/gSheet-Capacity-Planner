@@ -1,4 +1,4 @@
-var startMonth = 1;
+var firstMonth = 6;
 
 function onOpen() {
   
@@ -24,6 +24,37 @@ function onOpen() {
       .addItem('Add Project', 'addProject')
       .addToUi();
 }
+
+function hidePeople(){
+
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();  
+
+                   
+  for (i = 0; i < sheets.length; i++) { 
+      var value = sheets[i].getRange('C2').getValues()[0][0];
+  
+    if (value == "person"){
+      sheets[i].hideSheet();
+    }  
+  }
+    
+}
+
+
+function hideProjects(){
+  
+   var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();  
+
+                   
+  for (i = 0; i < sheets.length; i++) { 
+      var value = sheets[i].getRange('C2').getValues()[0][0];
+  
+    if (value == "project"){
+      sheets[i].hideSheet();
+    }  
+  }
+}
+
 
 function createProjectOverview(){
   var ui = SpreadsheetApp.getUi(); // Same variations.
@@ -85,10 +116,13 @@ function addProject(){
     sheet.getRange('A1').setValue("Name");
     sheet.getRange('B1').setValue("Total Points");
     sheet.getRange('C1').setValue("Type");
+    sheet.getRange('D1').setValue("Status");
 
     sheet.getRange('A2').setValue(projectName);
     sheet.getRange('B2').setValue(0);
     sheet.getRange('C2').setValue("project");
+    sheet.getRange('D2').setValue("active");
+
     
     
     //set static values
@@ -136,6 +170,7 @@ function updatePeopleOnProject(projectNameVal){
   
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(projectNameVal);
   var value = sheet.getRange('C2').getValues()[0][0];
+  
   if (value == "project"){
     var projectName = sheet.getRange('A2').getValues()[0][0];
     if (projectName != projectNameVal){
@@ -145,6 +180,8 @@ function updatePeopleOnProject(projectNameVal){
   }
 
   var data = getProjectsFromPeople();
+
+  Logger.log(data);
   
   var people = data[projectName];
   
@@ -225,6 +262,9 @@ function firstMonday (month, year){
   
 function updateProjects(){
   
+    var overviewSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Project Overview");
+    overviewSheet.clearConditionalFormatRules()
+    
   var projects = getProjectsFromPeople()
   for (i=0;i< projects.length; i++){
    
@@ -296,29 +336,31 @@ function getDataFromProjectSheet(projectName,count){
   if (projectSheet == null){
     Logger.log("not found:"+projectName);
     overviewSheet.getRange('B'+ row).setValue(projectName);
-        overviewSheet.getRange('B'+ row).setBackground("red");
+    overviewSheet.getRange('B'+ row).setBackground("red");
     return;
   }
   
-  overviewSheet.clearConditionalFormatRules()
+
   
     var value = projectSheet.getRange('C2').getValues()[0][0];
     
     if (value == "project"){
       
 
+      overviewSheet.getRange('A'+ row).setFormula("=indirect(CONCATENATE($B"+row+",\"!D2\"))");
+      overviewSheet.getRange('A'+ (row+1)).setFormula("=indirect(CONCATENATE($B"+row+",\"!D2\"))");
       overviewSheet.getRange('B'+ row).setValue("=HYPERLINK(\"#gid="+projectSheet.getSheetId()+"\",\""+projectSheet.getName()+"\")");
       overviewSheet.getRange('C'+ row).setValue("Plan");
-      overviewSheet.getRange('D'+row+':N'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"6\"))");
+      overviewSheet.getRange('D'+row+':BB'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"6\"))");
       overviewSheet.getRange('C'+ (row+1)).setValue("Actual");
-      overviewSheet.getRange('D'+(row+1)+':N'+(row+1)).setFormula("=indirect(CONCATENATE($B"+(row)+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"7\"))");
+      overviewSheet.getRange('D'+(row+1)+':BB'+(row+1)).setFormula("=indirect(CONCATENATE($B"+(row)+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"7\"))");
       
       var rules = overviewSheet.getConditionalFormatRules();
 
       var rule1 = SpreadsheetApp.newConditionalFormatRule()
       .whenFormulaSatisfied("=eq(D"+row+",D"+(row+1)+")=FALSE")
       .setBackground("#EDC9C4")
-      .setRanges([overviewSheet.getRange('D'+(row+1)+':N'+(row+1))])
+      .setRanges([overviewSheet.getRange('D'+(row+1)+':BB'+(row+1))])
       .build();
       
       rules.push(rule1);
@@ -326,7 +368,7 @@ function getDataFromProjectSheet(projectName,count){
        var rule2 = SpreadsheetApp.newConditionalFormatRule()
       .whenFormulaSatisfied("=eq(D"+row+",D"+(row+1)+") = TRUE")
       .setBackground("#55c170")
-      .setRanges([overviewSheet.getRange('D'+(row+1)+':N'+(row+1))])
+      .setRanges([overviewSheet.getRange('D'+(row+1)+':BB'+(row+1))])
       .build();
 
       rules.push(rule2);
@@ -350,14 +392,14 @@ function updatePeople(){
       var row = 6 + count;
       count ++;
       overviewSheet.getRange('B'+ row).setValue("=HYPERLINK(\"#gid="+sheets[i].getSheetId()+"\",\""+sheets[i].getName()+"\")");
-      overviewSheet.getRange('D'+row+':N'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"4\"))");
+      overviewSheet.getRange('D'+row+':BB'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"4\"))");
       
       var rules = overviewSheet.getConditionalFormatRules();
 
       var rule1 = SpreadsheetApp.newConditionalFormatRule()
       .whenNumberBetween(.5, .8)
       .setBackground("#55c170")
-      .setRanges([overviewSheet.getRange('D'+row+':N'+row)])
+      .setRanges([overviewSheet.getRange('D'+row+':BB'+row)])
       .build();
 
       rules.push(rule1);
