@@ -143,7 +143,10 @@ function addProject(){
     
     
         //set actual remaingin
-    sheet.getRange('D7:BB7').setValue("=if(D5<>\"\",$B$2+sum($D$8:D8)-sum($D$5:D5),D6)");
+    //first one gets special handling
+     sheet.getRange('D7').setValue("=if(D5<>\"\",$B$2+sum($D$8:D8)-sum($D$5:D5),D6)");
+    //moving on from there we use the previous actual
+    sheet.getRange('E7:BB7').setValue("=if(D5<>\"\",$B$2+sum($D$8:D8)-sum($D$5:D5),D7-E4)");
     
     
         //set delta row
@@ -187,6 +190,10 @@ function updatePeopleOnProject(projectNameVal){
   
   var people = data[projectName];
   
+  if (people == null){
+    Logger.log("nobody assigned to "+ projectName);
+    return;
+  }
   Logger.log(people);
   
   
