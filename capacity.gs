@@ -201,7 +201,7 @@ function updatePeopleOnProject(projectNameVal){
   
   for (i = 0; i < people.length; i++) { 
     var row = startRow + i;
-    var personFormula = "=iferror(vlookup($A$2, INDIRECT (CONCATENATE($C"+row+",\"!B\"&match($A$2,indirect(concatenate($C"+row+"&\"!$B:$B\")),0)&\":L\"& match($A$2,indirect(concatenate($C"+row+"&\"!$B:$B\")),0))),column()-2,0) * Indirect($C"+row+"&\"!\"&SUBSTITUTE(ADDRESS(1,column()-1,4),1,\"\")&\"6\") ,\"\")";
+    var personFormula = "=iferror(vlookup($A$2, INDIRECT (CONCATENATE($C"+row+",\"!B\"&match($A$2,indirect(concatenate($C"+row+"&\"!$B:$B\")),0)&\":BB\"& match($A$2,indirect(concatenate($C"+row+"&\"!$B:$B\")),0))),column()-2,0) * Indirect($C"+row+"&\"!\"&SUBSTITUTE(ADDRESS(1,column()-1,4),1,\"\")&\"6\") ,\"\")";
     
     sheet.getRange('C'+row).setValue(people[i]);
     sheet.getRange('D'+row+":BB"+row).setValue(personFormula);
