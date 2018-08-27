@@ -275,20 +275,33 @@ function updateProjects(){
   
     var overviewSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Project Overview");
     overviewSheet.clearConditionalFormatRules()
-    
+          var rules = overviewSheet.getConditionalFormatRules();
+
   var projects = getProjectsFromPeople()
   for (i=0;i< projects.length; i++){
    
     getDataFromProjectSheet(projects[i],i);
     
   }
+  
+  var rule2 = SpreadsheetApp.newConditionalFormatRule()
+  .whenNumberLessThan(0)
+  .setBackground("#00ff00")
+  .setRanges([overviewSheet.getRange('D4:BB100')])
+  .build();
+  
+  rules.push(rule2);
+  
+  
+  overviewSheet.setConditionalFormatRules(rules);
+  
 }
 
 function getProjectsFromPeople(){
   var overviewSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("People Overview");
   var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();  
   var count = 0;
-  overviewSheet.clearConditionalFormatRules()
+
   projectList = [];
                    
   for (i = 0; i < sheets.length; i++) { 
@@ -341,7 +354,7 @@ function getDataFromProjectSheet(projectName,count){
   
 
   
-  var row = 4 + (count * 3);
+  var row = 4 + (count * 2);
 
   
   if (projectSheet == null){
@@ -357,35 +370,11 @@ function getDataFromProjectSheet(projectName,count){
     
     if (value == "project"){
       
-
       overviewSheet.getRange('A'+ row).setFormula("=indirect(CONCATENATE($B"+row+",\"!D2\"))");
-      overviewSheet.getRange('A'+ (row+1)).setFormula("=indirect(CONCATENATE($B"+row+",\"!D2\"))");
       overviewSheet.getRange('B'+ row).setValue("=HYPERLINK(\"#gid="+projectSheet.getSheetId()+"\",\""+projectSheet.getName()+"\")");
-      overviewSheet.getRange('C'+ row).setValue("Plan");
-      overviewSheet.getRange('D'+row+':BB'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"6\"))");
-      overviewSheet.getRange('C'+ (row+1)).setValue("Actual");
-      overviewSheet.getRange('D'+(row+1)+':BB'+(row+1)).setFormula("=indirect(CONCATENATE($B"+(row)+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"7\"))");
+      overviewSheet.getRange('C'+ row).setValue("Points Remaining");
+      overviewSheet.getRange('D'+row+':BB'+row).setFormula("=indirect(CONCATENATE($B"+row+",\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"7\"))");
       
-      var rules = overviewSheet.getConditionalFormatRules();
-
-      var rule1 = SpreadsheetApp.newConditionalFormatRule()
-      .whenFormulaSatisfied("=eq(D"+row+",D"+(row+1)+")=FALSE")
-      .setBackground("#EDC9C4")
-      .setRanges([overviewSheet.getRange('D'+(row+1)+':BB'+(row+1))])
-      .build();
-      
-      rules.push(rule1);
-      
-       var rule2 = SpreadsheetApp.newConditionalFormatRule()
-      .whenFormulaSatisfied("=eq(D"+row+",D"+(row+1)+") = TRUE")
-      .setBackground("#55c170")
-      .setRanges([overviewSheet.getRange('D'+(row+1)+':BB'+(row+1))])
-      .build();
-
-      rules.push(rule2);
-
-      
-      overviewSheet.setConditionalFormatRules(rules);
       
     }
     
