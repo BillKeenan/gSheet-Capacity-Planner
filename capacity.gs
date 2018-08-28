@@ -274,9 +274,13 @@ function firstMonday (month, year){
 function updateProjects(){
   
     var overviewSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Project Overview");
+  
     overviewSheet.clearConditionalFormatRules()
-          var rules = overviewSheet.getConditionalFormatRules();
+  
+    var rules = overviewSheet.getConditionalFormatRules();
 
+    overviewSheet.getRange('A4:BB100').clearContent();
+  
   var projects = getProjectsFromPeople()
   for (i=0;i< projects.length; i++){
    
@@ -285,7 +289,7 @@ function updateProjects(){
   }
   
   var rule2 = SpreadsheetApp.newConditionalFormatRule()
-  .whenNumberLessThan(0)
+  .whenNumberLessThanOrEqualTo(0)
   .setBackground("#00ff00")
   .setRanges([overviewSheet.getRange('D4:BB100')])
   .build();
@@ -369,6 +373,8 @@ function getDataFromProjectSheet(projectName,count){
     var value = projectSheet.getRange('C2').getValues()[0][0];
     
     if (value == "project"){
+      
+     
       
       overviewSheet.getRange('A'+ row).setFormula("=indirect(CONCATENATE($B"+row+",\"!D2\"))");
       overviewSheet.getRange('B'+ row).setValue("=HYPERLINK(\"#gid="+projectSheet.getSheetId()+"\",\""+projectSheet.getName()+"\")");
