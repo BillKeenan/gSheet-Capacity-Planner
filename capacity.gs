@@ -299,6 +299,8 @@ function updateProjects(){
   
   overviewSheet.setConditionalFormatRules(rules);
   
+  setProjectFilter();
+  
 }
 
 function getProjectsFromPeople(){
@@ -432,4 +434,24 @@ function addFormula(){
     overviewSheet.getRange('C16:G16').setFormula("=indirect(CONCATENATE($B4,\"!\",SUBSTITUTE(ADDRESS(1,COLUMN(),4), \"1\", \"\"),\"4\"))");
 
   
+}
+
+function setProjectFilter() {
+ 
+    var overviewSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Project Overview");
+  
+  var newCriteria = SpreadsheetApp.newFilterCriteria()
+    .setHiddenValues(['hidden','complete'])
+    .build();
+  
+
+  var range = overviewSheet.getRange('A:A');
+
+  filter = range.getFilter();
+  if (filter == null){
+    filter = range.createFilter();
+    filter.setColumnFilterCriteria(1, newCriteria);
+  }
+
+
 }
